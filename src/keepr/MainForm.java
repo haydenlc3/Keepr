@@ -5,6 +5,7 @@
  */
 package keepr;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,6 +26,21 @@ public class MainForm extends javax.swing.JFrame {
         PassField.setText("");
         SiteField.setText("");
         EmailField.setText("");
+    }
+    
+    private boolean isVerified() {
+        if (!keepr.getData().isEmpty()) {
+            int selectedOption = JOptionPane.showConfirmDialog(null, 
+            "There are unsaved changes. Do you want to lose your data?", 
+            "Confirm", 
+            JOptionPane.YES_NO_OPTION); 
+
+            if (selectedOption == JOptionPane.YES_OPTION) { return true;
+            } else if (selectedOption == JOptionPane.NO_OPTION) { return false;
+            }
+        }
+        
+        return true;
     }
 
     /**
@@ -53,9 +69,14 @@ public class MainForm extends javax.swing.JFrame {
         Delete = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        OpenFile = new javax.swing.JMenuItem();
+        NewFile = new javax.swing.JMenuItem();
+        SaveFile = new javax.swing.JMenuItem();
+        Return = new javax.swing.JMenuItem();
+        Close = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Keepr");
         setBackground(new java.awt.Color(204, 204, 204));
         setResizable(false);
@@ -131,6 +152,47 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         jMenu1.setText("File");
+
+        OpenFile.setText("Open");
+        OpenFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OpenFileActionPerformed(evt);
+            }
+        });
+        jMenu1.add(OpenFile);
+
+        NewFile.setText("New");
+        NewFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewFileActionPerformed(evt);
+            }
+        });
+        jMenu1.add(NewFile);
+
+        SaveFile.setText("Save");
+        SaveFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaveFileActionPerformed(evt);
+            }
+        });
+        jMenu1.add(SaveFile);
+
+        Return.setText("Return");
+        Return.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReturnActionPerformed(evt);
+            }
+        });
+        jMenu1.add(Return);
+
+        Close.setText("Close");
+        Close.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CloseActionPerformed(evt);
+            }
+        });
+        jMenu1.add(Close);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -219,9 +281,11 @@ public class MainForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void DeleteAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteAllActionPerformed
-        DefaultTableModel model = (DefaultTableModel) DataTable.getModel();
-        model.setRowCount(0);
-        keepr.removeAll();
+        if (isVerified()) {
+            DefaultTableModel model = (DefaultTableModel) DataTable.getModel();
+            model.setRowCount(0);
+            keepr.removeAll();
+        }
     }//GEN-LAST:event_DeleteAllActionPerformed
 
     private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
@@ -229,8 +293,6 @@ public class MainForm extends javax.swing.JFrame {
         int[] rows = DataTable.getSelectedRows();
         for (int i = 0; i < rows.length; i++){
             model.removeRow(rows[i]-i);
-        }
-        for (int i = 0; i < rows.length; i++) {
             keepr.removePassword(i);
         }
     }//GEN-LAST:event_DeleteActionPerformed
@@ -258,6 +320,37 @@ public class MainForm extends javax.swing.JFrame {
             UserField.setText("Required field");
         }
     }//GEN-LAST:event_InsertActionPerformed
+
+    private void NewFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewFileActionPerformed
+        MainForm mf = new MainForm();
+        mf.setVisible(true);
+        mf.pack();
+    }//GEN-LAST:event_NewFileActionPerformed
+
+    private void OpenFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OpenFileActionPerformed
+        if (isVerified()) {
+            
+        }
+    }//GEN-LAST:event_OpenFileActionPerformed
+
+    private void SaveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveFileActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SaveFileActionPerformed
+
+    private void ReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnActionPerformed
+        if (isVerified()) {
+            LoginForm lf = new LoginForm();
+            lf.setVisible(true);
+            lf.pack();
+            this.dispose();
+        }
+    }//GEN-LAST:event_ReturnActionPerformed
+
+    private void CloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CloseActionPerformed
+        if (isVerified()) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_CloseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -296,12 +389,17 @@ public class MainForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Clear;
+    private javax.swing.JMenuItem Close;
     private javax.swing.JTable DataTable;
     private javax.swing.JButton Delete;
     private javax.swing.JButton DeleteAll;
     private javax.swing.JTextField EmailField;
     private javax.swing.JButton Insert;
+    private javax.swing.JMenuItem NewFile;
+    private javax.swing.JMenuItem OpenFile;
     private javax.swing.JTextField PassField;
+    private javax.swing.JMenuItem Return;
+    private javax.swing.JMenuItem SaveFile;
     private javax.swing.JTextField SiteField;
     private javax.swing.JTextField UserField;
     private javax.swing.JLabel jLabel1;
